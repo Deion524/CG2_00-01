@@ -1,6 +1,9 @@
 #include <Windows.h>
 #include <cstdint>
+#include <string>
+#include <format>
 
+// ウィンドウプロシージャ
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 	// メッセージに応じてゲーム固有の処理を行う
 	switch (msg) {
@@ -15,8 +18,17 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam) {
 	return DefWindowProc(hwnd, msg, wparam, lparam);
 }
 
+// ログ表示用の関数
+void Log(const std::string& message) {
+	OutputDebugStringA(message.c_str());
+}
+
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+
+	/*=======================================================
+						ウィンドウの設定
+	=======================================================*/
 
 	WNDCLASS wc{};
 	// ウィンドウプロシージャ
@@ -61,15 +73,27 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	ShowWindow(hwnd, SW_SHOW);
 
 
+	/*=======================================================
+							メインループ
+	=======================================================*/
+
+	// 変数の初期化
+	int enemyHp = 5;
+	const char* texturePath = "texturePath";
+
 	MSG msg{};
 	// ウィンドウの✖ボタンが押されるまでループ
-	while (msg.message!=WM_QUIT) {
+	while (msg.message != WM_QUIT) {
 		// Windowにメッセージが来てたら最優先で処理させる
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		} else {
 			// ゲームの処理
+
+			//Log(std::format("enemyHp{},texturePath{}\n", enemyHp, texturePath));
+			//break;
+
 		}
 	}
 
